@@ -1,12 +1,12 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const cors = require("cors")
 const bodyParser = require("body-parser")
 const employeeRoute = require('./routes/employeeRoutes')
 
 const app = express();
 dotenv.config();
-app.use(bodyParser.json())
 
 const PORT = process.env.PORT || 4000;
 
@@ -18,9 +18,12 @@ mongoose.connect(process.env.uri)
     .catch((error) => {
         console.log("Error is", error);
     });
+    
+// Middle ware
+app.use(cors())
+app.use(bodyParser.json())
+app.use('/employees', employeeRoute);
 
-
-app.use('/employees',employeeRoute)
 
     
 // Express server

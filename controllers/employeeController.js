@@ -1,23 +1,46 @@
 const Employee = require('../models/Employee')
 
+
+const createEmployee = async (req, res) => {
+    try {
+        console.log("➡️ Incoming data:", req.body);
+
+        const { name, email, phone, city } = req.body;
+        if (!name || !email || !phone || !city) {
+            return res.status(400).json({ message: "All fields required" });
+        }
+
+        const employee = new Employee({ name, email, phone, city });
+        await employee.save();
+
+        console.log("✅ Employee saved:", employee);
+        res.status(201).json(employee);
+    } catch (error) {
+        console.error("❌ Error saving employee:", error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+
 // posting data into Db
-const createEmployee = async  (req,res)=>{
-    try{
-        const {name,email,phone,city} = req.body
-        const employee = new Employee({
-            name,
-            email,
-            phone,
-            city
-        })
-        await employee.save()
-        res.status(201).json(employee)
-    }
-    catch(error){
-        console.log("error is ",error)
-        res.status(500).json({message:'server error'})
-    }
-}
+// const createEmployee = async  (req,res)=>{
+//     try{
+//         console.log("📥 Received Data:", req.body);
+//         const {name,email,phone,city} = req.body
+//         const employee = new Employee({
+//             name,
+//             email,
+//             phone,
+//             city
+//         })
+//         await employee.save()
+//         res.status(201).json(employee)
+//     }
+//     catch(error){
+//         console.log("error is ",error)
+//         res.status(500).json({message:'server error'})
+//     }
+// }
 
 
 // Getting all emp from Db
